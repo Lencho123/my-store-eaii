@@ -1,0 +1,30 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "my-store-api-for-store-management",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Lencho123/my-store-eaii.git"
+  },
+  "author": "Lencho Lachisa",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Lencho123/my-store-eaii/issues"
+  },
+  "homepage": "https://github.com/Lencho123/my-store-eaii#readme",
+  "dependencies": {
+    "dotenv": "^18.0.9",
+    "express": "^5.3.0",
+    "uuid": "^14.0.3",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
+}
