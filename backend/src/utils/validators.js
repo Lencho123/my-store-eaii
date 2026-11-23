@@ -62,7 +62,7 @@ const validateMaterialBody = (body, isPartial = false) => {
     unit !== undefined &&
     unit.trim().toLowerCase() === "count" &&
     body.quantity !== undefined &&
-    typeof body.quantity !== "number" &&
+    typeof body.quantity === "number" &&
     Number.isFinite(body.quantity) &&
     !Number.isInteger(body.quantity)
   ) {
