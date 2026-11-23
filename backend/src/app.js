@@ -1,19 +1,14 @@
 const express = require("express");
 const notFound = require("./middlewares/notFound");
 const errorHandler = require("./middlewares/errorHandler");
+const materialRoute = require("./routes/materialRoute");
 const app = express();
 
 // Middleware for parsing incoming Json req bodies
 app.use(express.json());
 
-// Home -welcome endpoint
-
-app.get("/", (req, res) => {
-  res.status(200).json({
-    message: "Welcome to My Store api",
-  });
-});
-
+// Material apis
+app.use("/api/materials", materialRoute);
 // Handle unknown routes
 app.use(notFound);
 
