@@ -83,6 +83,22 @@ const deletedMaterial = async (req, res) => {
   });
 };
 
+// Decrement material quantity by n
+const decremntMaterialQuantityByN = async (req, res) => {
+  const { id } = req.params;
+  const { n } = req.query;
+
+  const decrementedMaterial = await materialService.decremntMaterialQuantityByN(
+    id,
+    n,
+  );
+
+  res.status(200).json({
+    message: "Material quantity is decremented by n",
+    data: decrementedMaterial,
+  });
+};
+
 module.exports = {
   getMaterials,
   getMaterialById,
@@ -91,4 +107,5 @@ module.exports = {
   updateMaterial,
   updateMaterialPartial,
   deletedMaterial,
+  decremntMaterialQuantityByN,
 };

@@ -11,5 +11,6 @@ router.patch("/:id/quantity", materialController.addMaterialQuantity);
 router.put("/:id", validateRequest(), materialController.updateMaterial);
 router.patch("/:id", validateRequest(true), materialController.updateMaterialPartial);
 router.delete("/:id", materialController.deletedMaterial);
+router.delete("/:id/decrement", materialController.decremntMaterialQuantityByN);
 
 module.exports = router;
