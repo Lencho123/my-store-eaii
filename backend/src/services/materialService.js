@@ -214,6 +214,44 @@ const deleteMaterial = async (id) => {
   await writeMaterials(updatedMaterials);
   return deletedMaterial;
 };
+
+// DELETE MATERIAL ONE BY ONE (Decrement quantity by n)
+const decremntMaterialQuantityByN = async (id, n) => {
+  if (!validateUUID(id)) {
+    throw createAppError("Invalid material ID", 400);
+  }
+
+  n = Number(n);
+  if (!Number.isInteger(n) || n <= 0) {
+    throw createAppError("Decrementing value must be a positive integer", 400);
+  }
+
+  let materials = await getMaterials();
+  const materialIndex = materials.findIndex((item) => item.id === id);
+
+  if (materialIndex === -1) {
+    throw createAppError("Material not found", 404);
+  }
+
+  if (materials[materialIndex].quantity < n) {
+    throw createAppError(
+      "Number of deleted material must be less or equal to the quantity of the material",
+      400,
+    );
+  }
+
+  materials[materialIndex].quantity -= n;
+  const deletedMaterial = materials[materialIndex];
+
+  if (materials[materialIndex].quantity === 0) {
+    materials = materials.filter((item) => item.id !== id);
+  }
+
+  await writeMaterials(materials);
+
+  return deletedMaterial;
+};
+
 module.exports = {
   getMaterials,
   getMaterialById,
@@ -222,6 +260,7 @@ module.exports = {
   updateMaterial,
   updateMaterialPartial,
   deleteMaterial,
+  decremntMaterialQuantityByN,
 
   // Helpers
   appendMaterials, //help creation
