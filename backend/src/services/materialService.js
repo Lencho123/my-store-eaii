@@ -1,7 +1,6 @@
 // THIS FILE IS RESPONSIBLE FOR COMMUNICATING WITH LOCAL JSONL FILE
 const path = require("path");
 const fs = require("fs/promises");
-const initializeStorage = require("./storageService");
 const createAppError = require("../utils/appError");
 const { v4: uuidv4, validate: validateUUID } = require("uuid");
 
@@ -9,7 +8,6 @@ const dataFilePath = path.join(__dirname, "../data/data.jsonl");
 
 // Read all materials from the JSONL file
 const getMaterials = async () => {
-  await initializeStorage();
   const fileContent = await fs.readFile(dataFilePath, "utf8");
 
   if (!fileContent.trim()) {
@@ -53,8 +51,6 @@ const createMaterial = async (materialData) => {
 
 // Append a new material without replacing existing records.
 const appendMaterials = async (material) => {
-  await initializeStorage();
-
   const jsonline = JSON.stringify(material) + "\n";
 
   await fs.appendFile(dataFilePath, jsonline, "utf8");
@@ -62,8 +58,6 @@ const appendMaterials = async (material) => {
 
 // Replace the entire JSONL file with update records.
 const writeMaterials = async (materials) => {
-  await initializeStorage();
-
   const jsonlines = materials
     .map((material) => JSON.stringify(material))
     .join("\n");
@@ -94,6 +88,19 @@ const updateMaterial = async (id, materialData) => {
     unit: materialData.unit.trim(),
     unitPrice: materialData.unitPrice,
   };
+
+  const duplicatedMaterialIndex = materials.findIndex(
+    (item) =>
+      item.id !== id &&
+      item.name.toLowerCase() === updatedMaterial.name.toLowerCase(),
+  );
+
+  if (duplicatedMaterialIndex !== -1) {
+    throw createAppError(
+      "Updated name already exist in database. You must make the name unique to prevent duplication",
+      409,
+    );
+  }
 
   materials[materialIndex] = updatedMaterial;
   await writeMaterials(materials);
@@ -133,6 +140,19 @@ const updateMaterialPartial = async (id, materialData) => {
       ? materialData.unitPrice
       : materials[materialIndex].unitPrice,
   };
+
+    const duplicatedMaterialIndex = materials.findIndex(
+    (item) =>
+      item.id !== id &&
+      item.name.toLowerCase() === updatedMaterial.name.toLowerCase(),
+  );
+
+  if (duplicatedMaterialIndex !== -1) {
+    throw createAppError(
+      "Updated name already exist in database. You must make the name unique to prevent duplication",
+      409,
+    );
+  }
 
   materials[materialIndex] = updatedMaterial;
   await writeMaterials(materials);
